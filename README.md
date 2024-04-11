@@ -1,2 +1,2 @@
-# vue3-directions
-this is vue3-directions package
+# vue3-directives
+This is a directive library for Vue 3

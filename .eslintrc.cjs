@@ -28,7 +28,7 @@ module.exports = {
   },
   plugins: ["@typescript-eslint", "vue", "prettier"],
   rules: {
-    indent: ["error", 2],
+    indent: ["error", 2, { "SwitchCase": 1 }],
     "linebreak-style": ["error", "unix"],
     quotes: ["error", "double"],
     semi: ["error", "never"],

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import AutoScroll from "./test/autoScroll.vue"
+import EventOutside from "./test/eventOutside.vue"
 </script>
 <template>
   <div>
-    <auto-scroll></auto-scroll>
+    <event-outside></event-outside>
   </div>
 </template>
 <style scoped></style>

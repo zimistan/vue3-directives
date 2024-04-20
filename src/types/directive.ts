@@ -1,5 +1,5 @@
 import { Directive } from "vue"
 
 export interface DirectiveType {
-  autoScroll: Directive
+  [key: string]: Directive
 }

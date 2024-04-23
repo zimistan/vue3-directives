@@ -4,6 +4,7 @@ type Node = {
   element: Element
   eventType?: string
   event: () => void
+  listener: (e: MouseEvent) => void
 }
 
 interface DocumentMouseEvents {
@@ -40,21 +41,28 @@ const eventOutside: ObjectDirective = {
     if (binding.arg) {
       // 确保 binding.arg 是 DocumentMouseEvents 的一个键
       if (!((binding.arg as DocumentMouseEventsKeys) in documentMouseEvents)) {
-        throw new Error("必须传递一个有效的事件名称")
+        throw new Error("eventOutside: binding.arg is not a valid event type")
       }
+    } else {
+      binding.arg = "click"
     }
-    if (documentMouseEvents[binding.arg as DocumentMouseEventsKeys].size === 0) {
-      document.addEventListener(binding.arg as DocumentMouseEventsKeys, (event) => {
-        console.log(event)
-      })
-    }
-    if (!documentMouseEvents[binding.arg as DocumentMouseEventsKeys].has(el)) {
-      documentMouseEvents[binding.arg as DocumentMouseEventsKeys].set(el, {
+    let node: Node | undefined = documentMouseEvents[binding.arg as DocumentMouseEventsKeys].get(el)
+    if (!node) {
+      node = {
         element: el,
         eventType: binding.arg,
         event: binding.value,
-      })
+        listener: (e) => {
+          if (!el.contains(e.target as HTMLElement) && !el.isSameNode(e.target as HTMLElement)) {
+            binding.value()
+          }
+        },
+      }
     }
+    if (documentMouseEvents[binding.arg as DocumentMouseEventsKeys].size === 0) {
+      document.addEventListener(binding.arg as DocumentMouseEventsKeys, node!.listener)
+    }
+    documentMouseEvents[binding.arg as DocumentMouseEventsKeys].set(el, node)
   },
 }
 

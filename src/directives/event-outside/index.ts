@@ -4,7 +4,6 @@ type Node = {
   element: Element
   eventType?: string
   event: () => void
-  listener: (e: MouseEvent) => void
 }
 
 interface DocumentMouseEvents {
@@ -36,6 +35,28 @@ const documentMouseEvents: DocumentMouseEvents = {
   mouseout: new Map(),
   mouseup: new Map(),
 }
+
+function documentEvent(event: MouseEvent) {
+  documentMouseEvents[event.type as DocumentMouseEventsKeys].forEach((node) => {
+    if (!node.element.contains(event.target as HTMLElement)) {
+      node.event()
+    }
+  })
+}
+
+// 给Document添加事件
+function addDocumentEvents(type: DocumentMouseEventsKeys) {
+  if (documentMouseEvents[type].size === 0) {
+    document.addEventListener(type, documentEvent)
+  }
+}
+
+function removeDocumentEvents(type: DocumentMouseEventsKeys) {
+  if (documentMouseEvents[type].size === 0) {
+    document.removeEventListener(type, documentEvent)
+  }
+}
+
 const eventOutside: ObjectDirective = {
   mounted: (el, binding) => {
     if (binding.arg) {
@@ -46,23 +67,38 @@ const eventOutside: ObjectDirective = {
     } else {
       binding.arg = "click"
     }
+    addDocumentEvents(binding.arg as DocumentMouseEventsKeys)
     let node: Node | undefined = documentMouseEvents[binding.arg as DocumentMouseEventsKeys].get(el)
     if (!node) {
       node = {
         element: el,
         eventType: binding.arg,
         event: binding.value,
-        listener: (e) => {
-          if (!el.contains(e.target as HTMLElement) && !el.isSameNode(e.target as HTMLElement)) {
-            binding.value()
-          }
-        },
       }
     }
-    if (documentMouseEvents[binding.arg as DocumentMouseEventsKeys].size === 0) {
-      document.addEventListener(binding.arg as DocumentMouseEventsKeys, node!.listener)
-    }
     documentMouseEvents[binding.arg as DocumentMouseEventsKeys].set(el, node)
+  },
+  updated: (el, binding) => {
+    if (binding.arg) {
+      // 确保 binding.arg 是 DocumentMouseEvents 的一个键
+      if (!((binding.arg as DocumentMouseEventsKeys) in documentMouseEvents)) {
+        throw new Error("eventOutside: binding.arg is not a valid event type")
+      }
+    } else {
+      binding.arg = "click"
+    }
+    // addDocumentEvents(binding.arg as DocumentMouseEventsKeys)
+
+    if (binding.arg === documentMouseEvents[])
+  },
+  unmounted: (el, binding) => {
+    if (documentMouseEvents[binding.arg as DocumentMouseEventsKeys].size === 1) {
+      document.removeEventListener(
+        binding.arg as DocumentMouseEventsKeys,
+        documentMouseEvents[binding.arg as DocumentMouseEventsKeys].get(el)!.listener
+      )
+    }
+    documentMouseEvents[binding.arg as DocumentMouseEventsKeys].delete(el)
   },
 }
 

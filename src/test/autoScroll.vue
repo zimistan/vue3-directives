@@ -6,8 +6,8 @@ let num = ref(100)
 
 <template>
   <div class="flex gap-xl">
-    <ul v-autoScroll class="bg-red w-50 h-xl overflow-y-scroll">
-      <li v-for="item in num" :key="item">{{ item }}</li>
+    <ul v-autoScroll:BOTTOM="true" class="bg-red w-50 h-xl overflow-y-scroll">
+      <li class="m-r" v-for="item in num" :key="item">{{ item }}</li>
     </ul>
     <button @click="num++">点击</button>
   </div>

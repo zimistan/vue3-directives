@@ -1,5 +1,6 @@
-import { Directive } from "vue"
+import { Directive, DirectiveBinding } from "vue"
 
+type Direction = "TOP" | "BOTTOM" | "LEFT" | "RIGHT"
 type Node = {
   maxScrollHeight: number
   maxScrollWidth: number
@@ -7,13 +8,6 @@ type Node = {
   direction: Direction
   speed: number
   backSpeed: number
-}
-
-const enum Direction {
-  TOP,
-  BOTTOM,
-  LEFT,
-  RIGHT,
 }
 
 function run(node: Node) {
@@ -33,26 +27,26 @@ function scroll(node: Node, timeStamp: number, startTimeStamp: number = 0) {
 
 function canBack(node: Node) {
   switch (node.direction) {
-    case Direction.BOTTOM:
+    case "BOTTOM":
       return node.element.scrollTop === node.maxScrollHeight
-    case Direction.TOP:
+    case "TOP":
       return node.element.scrollTop === 0
-    case Direction.RIGHT:
+    case "RIGHT":
       return node.element.scrollLeft === node.maxScrollWidth
-    case Direction.LEFT:
+    case "LEFT":
       return node.element.scrollLeft === 0
   }
 }
 
 function isScrolledToStart(node: Node): boolean {
   switch (node.direction) {
-    case Direction.TOP:
+    case "TOP":
       return node.element.scrollTop >= node.maxScrollHeight - 5
-    case Direction.LEFT:
+    case "LEFT":
       return node.element.scrollLeft >= node.maxScrollWidth - 5
-    case Direction.BOTTOM:
+    case "BOTTOM":
       return node.element.scrollTop <= 5
-    case Direction.RIGHT:
+    case "RIGHT":
       return node.element.scrollLeft <= 5
   }
 }
@@ -70,21 +64,19 @@ function back(node: Node, timeStamp: number, startTimeStamp: number = 0) {
 /**
  * 根据指定的速度和方向改变节点的滚动位置。
  * @param node 表示要进行滚动操作的DOM节点的对象。
- * @param speed 滚动的速度，默认为1。
- * @param direction 滚动的方向，由Direction枚举类型指定。
  */
 const changeScroll = (node: Node) => {
   switch (node.direction) {
-    case Direction.TOP:
+    case "TOP":
       node.element.scrollTop -= getScrollNum(node.speed)
       break
-    case Direction.BOTTOM:
+    case "BOTTOM":
       node.element.scrollTop += getScrollNum(node.speed)
       break
-    case Direction.LEFT:
+    case "LEFT":
       node.element.scrollLeft -= getScrollNum(node.speed)
       break
-    case Direction.RIGHT:
+    case "RIGHT":
       node.element.scrollLeft += getScrollNum(node.speed)
       break
   }
@@ -92,16 +84,16 @@ const changeScroll = (node: Node) => {
 
 function changeReverseScroll(node: Node) {
   switch (node.direction) {
-    case Direction.TOP:
+    case "TOP":
       node.element.scrollTop += getScrollNum(node.backSpeed)
       break
-    case Direction.BOTTOM:
+    case "BOTTOM":
       node.element.scrollTop -= getScrollNum(node.backSpeed)
       break
-    case Direction.LEFT:
+    case "LEFT":
       node.element.scrollLeft += getScrollNum(node.backSpeed)
       break
-    case Direction.RIGHT:
+    case "RIGHT":
       node.element.scrollLeft -= getScrollNum(node.backSpeed)
       break
   }
@@ -114,15 +106,16 @@ function getScrollNum(speed: Node["speed"]) {
 /**
  * 更新或创建与给定HTMLElement关联的Node信息。
  * @param element - 需要更新信息的HTMLElement对象。
+ * @param binding
  * @returns 返回与该HTMLElement关联的Node对象。
  */
-const updateInfo = (element: HTMLElement): Node => {
+const updateInfo = (element: HTMLElement, binding: DirectiveBinding): Node => {
   const node = nodes.get(element)
   if (node) {
     node.element = element
     node.maxScrollHeight = element.scrollHeight - element.clientHeight
     node.maxScrollWidth = element.scrollWidth - element.clientWidth
-    node.direction = Direction.TOP
+    node.direction = binding.arg as Direction
     node.speed = 1
     node.backSpeed = 50
   } else {
@@ -130,7 +123,7 @@ const updateInfo = (element: HTMLElement): Node => {
       element,
       maxScrollHeight: element.scrollHeight - element.clientHeight,
       maxScrollWidth: element.scrollWidth - element.clientWidth,
-      direction: Direction.TOP,
+      direction: binding.arg as Direction,
       speed: 1,
       backSpeed: 50,
     })
@@ -139,13 +132,21 @@ const updateInfo = (element: HTMLElement): Node => {
 }
 
 const nodes: Map<Element, Node> = new Map()
+
 const autoScroll: Directive = {
-  mounted: (el: HTMLElement) => {
-    const node = updateInfo(el)
+  mounted: (el: HTMLElement, binding: DirectiveBinding) => {
+    binding.arg === undefined && (binding.arg = "BOTTOM")
+    if (!["TOP", "BOTTOM", "LEFT", "RIGHT"].includes(binding.arg)) {
+      console.error("Invalid arg", binding.arg)
+    }
+    // if (!Object.values(Direction).includes(binding.arg)) {
+    //   console.error("")
+    // }
+    const node = updateInfo(el, binding)
     run(node)
   },
-  updated: (el) => {
-    updateInfo(el)
+  updated: (el, binding: DirectiveBinding) => {
+    updateInfo(el, binding)
   },
 }
 export default autoScroll

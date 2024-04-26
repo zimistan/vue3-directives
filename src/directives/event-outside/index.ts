@@ -22,6 +22,8 @@ interface DocumentMouseEvents {
 
 type DocumentMouseEventsKeys = keyof DocumentMouseEvents
 
+const CUSTOM_ATTR_NAME = "data-event-outside-type"
+
 const documentMouseEvents: DocumentMouseEvents = {
   auxclick: new Map(),
   click: new Map(),
@@ -76,9 +78,10 @@ const eventOutside: ObjectDirective = {
         event: binding.value,
       }
     }
+    el.setAttribute(CUSTOM_ATTR_NAME, binding.arg)
     documentMouseEvents[binding.arg as DocumentMouseEventsKeys].set(el, node)
   },
-  updated: (el, binding) => {
+  updated: (el, binding, vnode, prevVNode) => {
     if (binding.arg) {
       // 确保 binding.arg 是 DocumentMouseEvents 的一个键
       if (!((binding.arg as DocumentMouseEventsKeys) in documentMouseEvents)) {
@@ -87,16 +90,20 @@ const eventOutside: ObjectDirective = {
     } else {
       binding.arg = "click"
     }
-    // addDocumentEvents(binding.arg as DocumentMouseEventsKeys)
-
-    if (binding.arg === documentMouseEvents[])
+    const newNode = {
+      element: el,
+      eventType: binding.arg,
+      event: binding.value,
+    }
+    if (binding.arg !== el.getAttribute(CUSTOM_ATTR_NAME)) {
+      addDocumentEvents(binding.arg as DocumentMouseEventsKeys)
+      documentMouseEvents[binding.arg as DocumentMouseEventsKeys].delete(el)
+      removeDocumentEvents(el.getAttribute(CUSTOM_ATTR_NAME) as DocumentMouseEventsKeys)
+    }
   },
   unmounted: (el, binding) => {
     if (documentMouseEvents[binding.arg as DocumentMouseEventsKeys].size === 1) {
-      document.removeEventListener(
-        binding.arg as DocumentMouseEventsKeys,
-        documentMouseEvents[binding.arg as DocumentMouseEventsKeys].get(el)!.listener
-      )
+      document.removeEventListener(binding.arg as DocumentMouseEventsKeys, documentEvent)
     }
     documentMouseEvents[binding.arg as DocumentMouseEventsKeys].delete(el)
   },

@@ -81,7 +81,7 @@ const eventOutside: ObjectDirective = {
     el.setAttribute(CUSTOM_ATTR_NAME, binding.arg)
     documentMouseEvents[binding.arg as DocumentMouseEventsKeys].set(el, node)
   },
-  updated: (el, binding, vnode, prevVNode) => {
+  updated: (el, binding) => {
     if (binding.arg) {
       // 确保 binding.arg 是 DocumentMouseEvents 的一个键
       if (!((binding.arg as DocumentMouseEventsKeys) in documentMouseEvents)) {
@@ -97,14 +97,13 @@ const eventOutside: ObjectDirective = {
     }
     if (binding.arg !== el.getAttribute(CUSTOM_ATTR_NAME)) {
       addDocumentEvents(binding.arg as DocumentMouseEventsKeys)
-      documentMouseEvents[binding.arg as DocumentMouseEventsKeys].delete(el)
       removeDocumentEvents(el.getAttribute(CUSTOM_ATTR_NAME) as DocumentMouseEventsKeys)
+      documentMouseEvents[el.getAttribute(CUSTOM_ATTR_NAME) as DocumentMouseEventsKeys].delete(el)
     }
+    documentMouseEvents[binding.arg as DocumentMouseEventsKeys].set(el, newNode)
   },
   unmounted: (el, binding) => {
-    if (documentMouseEvents[binding.arg as DocumentMouseEventsKeys].size === 1) {
-      document.removeEventListener(binding.arg as DocumentMouseEventsKeys, documentEvent)
-    }
+    removeDocumentEvents(el)
     documentMouseEvents[binding.arg as DocumentMouseEventsKeys].delete(el)
   },
 }

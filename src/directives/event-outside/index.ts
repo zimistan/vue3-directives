@@ -38,7 +38,7 @@ const documentMouseEvents: DocumentMouseEvents = {
   mouseup: new Map(),
 }
 
-function documentEvent(event: MouseEvent) {
+function handleEvents(event: MouseEvent) {
   documentMouseEvents[event.type as DocumentMouseEventsKeys].forEach((node) => {
     if (!node.element.contains(event.target as HTMLElement)) {
       node.event()
@@ -46,16 +46,15 @@ function documentEvent(event: MouseEvent) {
   })
 }
 
-// 给Document添加事件
 function addDocumentEvents(type: DocumentMouseEventsKeys) {
   if (documentMouseEvents[type].size === 0) {
-    document.addEventListener(type, documentEvent)
+    document.addEventListener(type, handleEvents)
   }
 }
 
 function removeDocumentEvents(type: DocumentMouseEventsKeys) {
   if (documentMouseEvents[type].size === 0) {
-    document.removeEventListener(type, documentEvent)
+    document.removeEventListener(type, handleEvents)
   }
 }
 

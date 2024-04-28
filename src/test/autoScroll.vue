@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue"
+  import { ref } from "vue"
 
-let num = ref(100)
+  let num = ref(100)
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import EventOutside from "./test/eventOutside.vue"
+import eventOutside from "./test/eventOutside.vue"
 </script>
 <template>
   <div>

@@ -28,7 +28,7 @@ module.exports = {
   },
   plugins: ["@typescript-eslint", "vue", "prettier"],
   rules: {
-    indent: ["error", 2],
+    indent: ["error", 2, { "SwitchCase": 1 }],
     "linebreak-style": ["error", "unix"],
     quotes: ["error", "double"],
     semi: ["error", "never"],
@@ -55,7 +55,7 @@ module.exports = {
     "array-bracket-spacing": "warn", // 要求数组方括号中使用一致的空格
     // 要求每一行标签的最大属性不超五个
     "vue/max-attributes-per-line": ["warn", { singleline: 5 }],
-    // 要求html标签的缩进为需要4个空格
+    // 要求html标签的缩进为需要2个空格
     "vue/html-indent": [
       "warn",
       2,

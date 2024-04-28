@@ -139,9 +139,6 @@ const autoScroll: Directive = {
     if (!["TOP", "BOTTOM", "LEFT", "RIGHT"].includes(binding.arg)) {
       console.error("Invalid arg", binding.arg)
     }
-    // if (!Object.values(Direction).includes(binding.arg)) {
-    //   console.error("")
-    // }
     const node = updateInfo(el, binding)
     run(node)
   },

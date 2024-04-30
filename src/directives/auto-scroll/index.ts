@@ -1,4 +1,5 @@
 import { Directive, DirectiveBinding } from "vue"
+import { AutoScrollOption } from "../../types/optionTypes"
 
 type Direction = "TOP" | "BOTTOM" | "LEFT" | "RIGHT"
 type Node = {
@@ -6,9 +7,7 @@ type Node = {
   maxScrollWidth: number
   element: Element
   direction: Direction
-  speed: number
-  backSpeed: number
-}
+} & AutoScrollOption
 
 function run(node: Node) {
   window.requestAnimationFrame((timeStamp) => scroll(node, timeStamp))
@@ -68,16 +67,16 @@ function back(node: Node, timeStamp: number, startTimeStamp: number = 0) {
 const changeScroll = (node: Node) => {
   switch (node.direction) {
     case "TOP":
-      node.element.scrollTop -= getScrollNum(node.speed)
+      node.element.scrollTop -= getScrollNum(node.speed!)
       break
     case "BOTTOM":
-      node.element.scrollTop += getScrollNum(node.speed)
+      node.element.scrollTop += getScrollNum(node.speed!)
       break
     case "LEFT":
-      node.element.scrollLeft -= getScrollNum(node.speed)
+      node.element.scrollLeft -= getScrollNum(node.speed!)
       break
     case "RIGHT":
-      node.element.scrollLeft += getScrollNum(node.speed)
+      node.element.scrollLeft += getScrollNum(node.speed!)
       break
   }
 }
@@ -85,22 +84,22 @@ const changeScroll = (node: Node) => {
 function changeReverseScroll(node: Node) {
   switch (node.direction) {
     case "TOP":
-      node.element.scrollTop += getScrollNum(node.backSpeed)
+      node.element.scrollTop += getScrollNum(node.backSpeed!)
       break
     case "BOTTOM":
-      node.element.scrollTop -= getScrollNum(node.backSpeed)
+      node.element.scrollTop -= getScrollNum(node.backSpeed!)
       break
     case "LEFT":
-      node.element.scrollLeft += getScrollNum(node.backSpeed)
+      node.element.scrollLeft += getScrollNum(node.backSpeed!)
       break
     case "RIGHT":
-      node.element.scrollLeft -= getScrollNum(node.backSpeed)
+      node.element.scrollLeft -= getScrollNum(node.backSpeed!)
       break
   }
 }
 
 function getScrollNum(speed: Node["speed"]) {
-  return parseFloat((speed / window.devicePixelRatio).toFixed(2)) + 0.01
+  return parseFloat((speed! / window.devicePixelRatio).toFixed(2)) + 0.01
 }
 
 /**
@@ -109,32 +108,22 @@ function getScrollNum(speed: Node["speed"]) {
  * @param binding
  * @returns 返回与该HTMLElement关联的Node对象。
  */
-const updateInfo = (element: HTMLElement, binding: DirectiveBinding): Node => {
-  const node = nodes.get(element)
-  if (node) {
-    node.element = element
-    node.maxScrollHeight = element.scrollHeight - element.clientHeight
-    node.maxScrollWidth = element.scrollWidth - element.clientWidth
-    node.direction = binding.arg as Direction
-    node.speed = 1
-    node.backSpeed = 50
-  } else {
-    nodes.set(element, {
-      element,
-      maxScrollHeight: element.scrollHeight - element.clientHeight,
-      maxScrollWidth: element.scrollWidth - element.clientWidth,
-      direction: binding.arg as Direction,
-      speed: 1,
-      backSpeed: 50,
-    })
-  }
+const updateInfo = (element: HTMLElement, binding: DirectiveBinding<AutoScrollOption & { arg: Direction }>): Node => {
+  nodes.set(element, {
+    element,
+    maxScrollHeight: element.scrollHeight - element.clientHeight,
+    maxScrollWidth: element.scrollWidth - element.clientWidth,
+    direction: binding.arg as Direction,
+    speed: binding.value.speed || 50,
+    backSpeed: binding.value.backSpeed || 1,
+  })
   return nodes.get(element) as Node
 }
 
 const nodes: Map<Element, Node> = new Map()
 
 const autoScroll: Directive = {
-  mounted: (el: HTMLElement, binding: DirectiveBinding) => {
+  mounted: (el: HTMLElement, binding: DirectiveBinding<AutoScrollOption & { arg: Direction }>) => {
     binding.arg === undefined && (binding.arg = "BOTTOM")
     if (!["TOP", "BOTTOM", "LEFT", "RIGHT"].includes(binding.arg)) {
       console.error("Invalid arg", binding.arg)

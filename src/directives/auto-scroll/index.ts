@@ -1,4 +1,4 @@
-import { Directive, DirectiveBinding } from "vue"
+import { Directive, DirectiveBinding, watch } from "vue"
 import { AutoScrollOption } from "../../types/optionTypes"
 
 type Direction = "TOP" | "BOTTOM" | "LEFT" | "RIGHT"
@@ -7,6 +7,7 @@ type Node = {
   maxScrollWidth: number
   element: Element
   direction: Direction
+  animFrame?: number
 } & AutoScrollOption
 
 function run(node: Node) {
@@ -21,7 +22,9 @@ function scroll(node: Node, timeStamp: number, startTimeStamp: number = 0) {
     changeScroll(node)
     startTimeStamp = timeStamp
   }
-  window.requestAnimationFrame((timeStamp) => scroll(node, timeStamp, startTimeStamp))
+  nodes.get(node.element)!.animFrame = window.requestAnimationFrame((timeStamp) =>
+    scroll(node, timeStamp, startTimeStamp)
+  )
 }
 
 function canBack(node: Node) {
@@ -124,15 +127,20 @@ const nodes: Map<Element, Node> = new Map()
 
 const autoScroll: Directive = {
   mounted: (el: HTMLElement, binding: DirectiveBinding<AutoScrollOption & { arg: Direction }>) => {
+    console.log(binding)
     binding.arg === undefined && (binding.arg = "BOTTOM")
     if (!["TOP", "BOTTOM", "LEFT", "RIGHT"].includes(binding.arg)) {
       console.error("Invalid arg", binding.arg)
     }
+    watch(binding.value, (res) => {
+      console.log(res, 123)
+    })
     const node = updateInfo(el, binding)
     run(node)
   },
   updated: (el, binding: DirectiveBinding) => {
-    updateInfo(el, binding)
+    window.cancelAnimationFrame(nodes.get(el)!.animFrame!)
+    run(updateInfo(el, binding))
   },
 }
 export default autoScroll

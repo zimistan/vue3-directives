@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import AutoScroll from "./test/autoScroll.vue"
+import AutoScroll from './test/autoScroll.vue'
 </script>
+
 <template>
   <div>
-    <auto-scroll></auto-scroll>
+    <AutoScroll />
   </div>
 </template>
+
 <style scoped></style>

@@ -1,6 +1,5 @@
-export type AutoScrollOption = {
+export interface AutoScrollOption {
   speed?: number
   backSpeed?: number
-  pauseOnHover?: boolean
   disable?: boolean
 }

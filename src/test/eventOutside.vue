@@ -1,20 +1,24 @@
 <script setup lang="ts">
-import { reactive } from "vue"
+import { reactive } from 'vue'
 
 function sayHello() {
-  console.log("Hello")
+  console.log('Hello')
 }
 
 const state = reactive({
   show: true,
-  type: "click",
+  type: 'click',
 })
 </script>
 
 <template>
   <div>
-    <button v-if="state.show" v-eventOutside:[state.type]="sayHello">点击我外面即可触发</button>
-    <button @click="state.type = 'auxclick'" v-autoScroll v-eventOutside:[state.type]="sayHello">关闭</button>
+    <button v-if="state.show" v-eventOutside:[state.type]="sayHello">
+      点击我外面即可触发
+    </button>
+    <button v-autoScroll v-eventOutside:[state.type]="sayHello" @click="state.type = 'auxclick'">
+      关闭
+    </button>
   </div>
 </template>
 

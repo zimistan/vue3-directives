@@ -1,4 +1,4 @@
-import { Directive } from "vue"
+import type { Directive } from 'vue'
 
 export interface DirectiveType {
   [key: string]: Directive

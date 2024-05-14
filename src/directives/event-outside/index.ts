@@ -1,6 +1,6 @@
-import { ObjectDirective } from "vue"
+import type { ObjectDirective } from 'vue'
 
-type Node = {
+interface Node {
   element: Element
   eventType?: string
   event: () => void
@@ -22,7 +22,7 @@ interface DocumentMouseEvents {
 
 type DocumentMouseEventsKeys = keyof DocumentMouseEvents
 
-const CUSTOM_ATTR_NAME = "data-event-outside-type"
+const CUSTOM_ATTR_NAME = 'data-event-outside-type'
 
 const documentMouseEvents: DocumentMouseEvents = {
   auxclick: new Map(),
@@ -40,33 +40,30 @@ const documentMouseEvents: DocumentMouseEvents = {
 
 function handleEvents(event: MouseEvent) {
   documentMouseEvents[event.type as DocumentMouseEventsKeys].forEach((node) => {
-    if (!node.element.contains(event.target as HTMLElement)) {
+    if (!node.element.contains(event.target as HTMLElement))
       node.event()
-    }
   })
 }
 
 function addDocumentEvents(type: DocumentMouseEventsKeys) {
-  if (documentMouseEvents[type].size === 0) {
+  if (documentMouseEvents[type].size === 0)
     document.addEventListener(type, handleEvents)
-  }
 }
 
 function removeDocumentEvents(type: DocumentMouseEventsKeys) {
-  if (documentMouseEvents[type].size === 0) {
+  if (documentMouseEvents[type].size === 0)
     document.removeEventListener(type, handleEvents)
-  }
 }
 
 const eventOutside: ObjectDirective = {
   mounted: (el, binding) => {
     if (binding.arg) {
       // 确保 binding.arg 是 DocumentMouseEvents 的一个键
-      if (!((binding.arg as DocumentMouseEventsKeys) in documentMouseEvents)) {
-        throw new Error("eventOutside: binding.arg is not a valid event type")
-      }
-    } else {
-      binding.arg = "click"
+      if (!((binding.arg as DocumentMouseEventsKeys) in documentMouseEvents))
+        throw new Error('eventOutside: binding.arg is not a valid event type')
+    }
+    else {
+      binding.arg = 'click'
     }
     addDocumentEvents(binding.arg as DocumentMouseEventsKeys)
     let node: Node | undefined = documentMouseEvents[binding.arg as DocumentMouseEventsKeys].get(el)
@@ -83,11 +80,11 @@ const eventOutside: ObjectDirective = {
   updated: (el, binding) => {
     if (binding.arg) {
       // 确保 binding.arg 是 DocumentMouseEvents 的一个键
-      if (!((binding.arg as DocumentMouseEventsKeys) in documentMouseEvents)) {
-        throw new Error("eventOutside: binding.arg is not a valid event type")
-      }
-    } else {
-      binding.arg = "click"
+      if (!((binding.arg as DocumentMouseEventsKeys) in documentMouseEvents))
+        throw new Error('eventOutside: binding.arg is not a valid event type')
+    }
+    else {
+      binding.arg = 'click'
     }
     const newNode = {
       element: el,

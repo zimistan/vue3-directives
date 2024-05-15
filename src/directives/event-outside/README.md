@@ -14,11 +14,10 @@
 ## 示例
 
 ```vue
-
 <script setup lang="ts">
-  function sayHello() {
-    console.log("hello world!!!")
-  }
+function sayHello() {
+  console.log('hello world!!!')
+}
 </script>
 
 <template>

@@ -5,7 +5,7 @@ import type { AutoScrollOption } from '../types/optionTypes'
 const num = ref(100)
 const Button = ref()
 onMounted(() => {})
-const b = null
+const c = null
 const autoScrollOption = ref<AutoScrollOption>({
   speed: 1,
   backSpeed: 30,

@@ -29,8 +29,8 @@
   },
   "lint-staged": {
     "*.js,*.ts,*.vue": [
-      "run lint:fix",
-      "run lint"
+      "pnpm run lint:fix",
+      "pnpm run lint"
     ],
     "*.css": [
       "stylelint --fix",

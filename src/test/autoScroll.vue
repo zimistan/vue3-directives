@@ -3,10 +3,12 @@ import { onMounted, ref } from 'vue'
 import type { AutoScrollOption } from '../types/optionTypes'
 
 const num = ref(100)
-onMounted(() => {})
+onMounted(() => {
+})
 const autoScrollOption = ref<AutoScrollOption>({
   speed: 1,
   backSpeed: 30,
+  disable: false,
 })
 
 const dicoration = ref('BOTTOM')

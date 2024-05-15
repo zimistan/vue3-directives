@@ -12,7 +12,7 @@ const state = reactive({
 
 <template>
   <div>
-    <button v-if="state.show" v-eventOutside:[state.type]="sayHello">
+    <button v-if="state.show" v-eventOutside:auxclick="sayHello">
       点击我外面即可触发
     </button>
     <button v-autoScroll v-eventOutside:[state.type]="sayHello" @click="state.type = 'auxclick'">

@@ -120,8 +120,8 @@ function updateInfo(element: HTMLElement, binding: DirectiveBinding<AutoScrollOp
     maxScrollHeight: element.scrollHeight - element.clientHeight,
     maxScrollWidth: element.scrollWidth - element.clientWidth,
     direction: binding.arg as Direction,
-    speed: binding.value?.speed || 50,
-    backSpeed: binding.value?.backSpeed || 1,
+    speed: binding.value?.speed || 1,
+    backSpeed: binding.value?.backSpeed || 50,
     disable: binding.value?.disable || false,
   })
   return nodes.get(element) as Node

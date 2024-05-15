@@ -2,7 +2,6 @@
 import { reactive } from 'vue'
 
 function sayHello() {
-  console.log('Hello')
 }
 
 const state = reactive({

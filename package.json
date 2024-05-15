@@ -28,9 +28,8 @@
     "vue-tsc": "^2.0.6"
   },
   "lint-staged": {
-    "*.js,*.ts,*.vue": [
-      "lint:fix",
-      "lint"
+    "*.vue": [
+      "pnpm run lint:fix"
     ]
   }
 }

@@ -12,6 +12,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@ileostar/v3-directives": "^1.0.5",
     "vue": "^3.4.21"
   },
   "devDependencies": {
@@ -20,6 +21,7 @@
     "@unocss/eslint-plugin": "^0.60.2",
     "@vitejs/plugin-vue": "^5.0.4",
     "eslint": "9.2.0",
+    "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "sass": "^1.72.0",
     "typescript": "^5.2.2",

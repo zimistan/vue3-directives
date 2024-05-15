@@ -4,9 +4,7 @@ import type { AutoScrollOption } from '../types/optionTypes'
 
 const num = ref(100)
 const Button = ref()
-onMounted(() => {
-  console.log(Button.value)
-})
+onMounted(() => {})
 const a = null
 const autoScrollOption = ref<AutoScrollOption>({
   speed: 1,
@@ -25,7 +23,10 @@ function onClick() {
 
 <template>
   <div class="flex gap-xl">
-    <ul v-autoScroll:[dicoration]="autoScrollOption" class="h-xl w-50 overflow-y-scroll bg-red">
+    <ul
+      v-autoScroll:[dicoration]="autoScrollOption"
+      class="h-xl w-50 overflow-y-scroll bg-red"
+    >
       <li v-for="item in num" :key="item" class="m-r">
         {{ item }}
       </li>

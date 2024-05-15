@@ -22,22 +22,22 @@
 ## 示例
 
 ```vue
-
 <script setup lang="ts">
-  import { ref } from "vue"
-  //...
-  import type { AutoScrollOption } from '@/types/optionTypes'
+import { ref } from 'vue'
+// ...
+import type { AutoScrollOption } from '@/types/optionTypes'
 
-  const autoScrollOption = ref<AutoScrollOption>({
-    speed: 1,
-    backSpeed: 30,
-    disable: false,
-  })
-  //...
+const autoScrollOption = ref<AutoScrollOption>({
+  speed: 1,
+  backSpeed: 30,
+  disable: false,
+})
+// ...
 </script>
+
 <template>
   <div>
-    <ul style="height:100px;" v-autoScroll:BOTTOM="autoScrollOption">
+    <ul v-autoScroll:BOTTOM="autoScrollOption" style="height:100px;">
       <li v-for="item in 100" :key="item">
         滚动中。。。
       </li>

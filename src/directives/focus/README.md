@@ -9,11 +9,10 @@
 ## 示例
 
 ```vue
-
 <script setup lang="ts">
-  import { ref } from 'vue'
+import { ref } from 'vue'
 
-  const isFocus = ref(true)
+const isFocus = ref(true)
 </script>
 
 <template>

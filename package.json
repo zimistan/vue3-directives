@@ -8,7 +8,8 @@
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky"
   },
   "dependencies": {
     "vue": "^3.4.21"
@@ -19,7 +20,6 @@
     "@unocss/eslint-plugin": "^0.60.2",
     "@vitejs/plugin-vue": "^5.0.4",
     "eslint": "9.2.0",
-    "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "sass": "^1.72.0",
     "typescript": "^5.2.2",
@@ -27,19 +27,14 @@
     "vite": "^5.2.0",
     "vue-tsc": "^2.0.6"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
-    "*.{html,vue,css,scss}": [
-      "prettier --write",
-      "git add"
+    "*.js,*.ts,*.vue": [
+      "run lint:fix",
+      "run lint"
     ],
-    "*.{js,vue,ts}": [
-      "eslint --fix",
-      "git add -A"
+    "*.css": [
+      "stylelint --fix",
+      "git add"
     ]
   }
 }

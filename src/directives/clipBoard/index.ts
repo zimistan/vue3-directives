@@ -1,16 +1,33 @@
 import type { ObjectDirective } from 'vue'
-import type { ClipBoardOption } from '../../types/optionTypes'
 
-const clipBoardObj = new Clipboard()
+interface CopyElementMap {
+  sync: boolean | undefined
+  value: string
+  type: 'text' | 'image'
+}
+
+const copyElementMap: Map<HTMLElement, CopyElementMap> = new Map()
+const clipBoardObj = navigator.clipboard
+
+function onCopy() {
+  const copyElement = copyElementMap.get(this)!
+  if (!copyElement.sync) {
+    clipBoardObj.writeText(copyElement.value).then(() => {
+
+    })
+  }
+}
 
 const clipBoard: ObjectDirective = {
-  mounted(el: HTMLElement, binding: ClipBoardOption) {
+  mounted(el: HTMLElement, binding) {
     if (typeof binding.value !== 'string' || binding.value.length < 1)
       throw new Error('The binding value must be a non-empty string.')
-    clipBoardObj.writeText('这个是复制的文本').then(() => {
-    }).catch(() => {
-      throw new Error('复制文本失败')
+    copyElementMap.set(el, {
+      sync: binding.modifiers.sync,
+      value: binding.value,
+      type: 'text',
     })
+    el.addEventListener('click', onCopy)
   },
   updated() {
   },

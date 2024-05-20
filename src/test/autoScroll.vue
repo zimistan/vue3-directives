@@ -23,10 +23,7 @@ function onClick() {
 
 <template>
   <div class="flex gap-xl">
-    <ul
-      v-autoScroll:[dicoration]="autoScrollOption"
-      class="h-xl w-50 overflow-y-scroll bg-red"
-    >
+    <ul v-autoScroll:[dicoration]="autoScrollOption" class="h-xl w-50 overflow-y-scroll bg-red">
       <li v-for="item in num" :key="item" class="m-r">
         {{ item }}
       </li>

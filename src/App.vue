@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import EventOutside from './test/eventOutside.vue'
+import ClipBoard from './test/clipBoard.vue'
 </script>
 
 <template>
   <div>
     <!--    <Focus /> -->
-    <EventOutside />
+    <ClipBoard />
   </div>
 </template>
 

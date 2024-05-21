@@ -114,7 +114,7 @@ function getScrollNum(speed: Node['speed']) {
  * @param binding
  * @returns 返回与该HTMLElement关联的Node对象。
  */
-function updateInfo(element: HTMLElement, binding: DirectiveBinding<AutoScrollOption & { arg: Direction }>): Node {
+function updateInfo(element: HTMLElement, binding: DirectiveBinding<AutoScrollOption>): Node {
   nodes.set(element, {
     element,
     maxScrollHeight: element.scrollHeight - element.clientHeight,
@@ -127,8 +127,8 @@ function updateInfo(element: HTMLElement, binding: DirectiveBinding<AutoScrollOp
   return nodes.get(element) as Node
 }
 
-const autoScroll: Directive = {
-  mounted: (el: HTMLElement, binding: DirectiveBinding<AutoScrollOption & { arg: Direction }>) => {
+const autoScroll: Directive<HTMLElement, AutoScrollOption> = {
+  mounted: (el: HTMLElement, binding) => {
     binding.arg === undefined && (binding.arg = 'BOTTOM')
     if (!['TOP', 'BOTTOM', 'LEFT', 'RIGHT'].includes(binding.arg))
       throw new Error('Invalid arg')
@@ -136,12 +136,11 @@ const autoScroll: Directive = {
     const node = updateInfo(el, binding)
     run(node)
   },
-  updated: (el, binding: DirectiveBinding<AutoScrollOption & { arg: Direction }>) => {
+  updated: (el, binding: DirectiveBinding) => {
     window.cancelAnimationFrame(nodes.get(el)!.animFrame!)
     binding.arg === undefined && (binding.arg = 'BOTTOM')
     if (!['TOP', 'BOTTOM', 'LEFT', 'RIGHT'].includes(binding.arg))
       throw new Error('Invalid arg')
-
     run(updateInfo(el, binding))
   },
   beforeUnmount: (el: HTMLElement) => {

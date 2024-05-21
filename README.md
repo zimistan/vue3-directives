@@ -11,5 +11,5 @@
 3. [x] [focus](./src/directives/focus/README.md) `获得焦点`
 4. [ ] hotkey `键盘事件监听`
 5. [ ] money `格式化金额`
-6. [ ] clipBoard `复制文本`
+6. [x] [clipBoard](./src/directives/clipBoard/README.md) `复制文本`
 7. [ ] highlight `高亮文本`

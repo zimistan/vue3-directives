@@ -1,18 +1,36 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { onMounted, ref } from 'vue'
+import type { AutoScrollOption } from '../types/optionTypes'
 
-let num = ref(100)
+const num = ref(100)
+onMounted(() => {
+})
+const autoScrollOption = ref<AutoScrollOption>({
+  speed: 1,
+  backSpeed: 30,
+  disable: false,
+})
+
+const dicoration = ref('BOTTOM')
+
+function onClick() {
+  autoScrollOption.value = {
+    speed: 100,
+    backSpeed: 30,
+  }
+}
 </script>
 
 <template>
   <div class="flex gap-xl">
-    <ul v-autoScroll class="bg-red w-50 h-xl overflow-y-scroll">
-      <li v-for="item in num" :key="item">{{ item }}</li>
+    <ul v-auto-scroll:[dicoration]="autoScrollOption" class="h-xl w-50 overflow-y-scroll bg-red">
+      <li v-for="item in num" :key="item" class="m-r">
+        {{ item }}
+      </li>
     </ul>
-    <ul v-autoScroll class="bg-red w-50 h-xl overflow-y-scroll">
-      <li v-for="item in 100" :key="item">{{ item }}</li>
-    </ul>
-    <button @click="num++">点击</button>
+    <button @click="onClick">
+      点击
+    </button>
   </div>
 </template>
 

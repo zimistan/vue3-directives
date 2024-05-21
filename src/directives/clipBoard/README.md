@@ -1,20 +1,18 @@
 # clipBoard
 
-触发事件将文本或图片保存到粘贴板
+点击元素时将指令的值保存到粘贴板
 
 ## value
 
-接收`string`类型的值，如果arg是`text`，并且
+接收`string`类型的值，当点击元素时将内容保存到粘贴板。
 
-## arg
+## 示例
 
-结束如下参数中的一个:
+```vue
 
-|   参数    |           说明           |
-|:-------:|:----------------------:|
-|  text   |  默认值，将value中的文本复制到粘贴板  |
-| imgPath | 接受图片链接，并将链接解析成图片保存到粘贴板 |
-|  image  |   接受二进制的图片数据，并保存包粘贴板   |
-
-## modifiers
-接受一个或多个鼠标事件类型，触发该事件时执行保存到粘贴板的操作
+<template>
+  <div>
+    <button v-clip-board="'https://github.com/zimistan/vue3-directives'">点击复制</button>
+  </div>
+</template>
+```

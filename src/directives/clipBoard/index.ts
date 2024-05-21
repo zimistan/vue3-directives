@@ -1,35 +1,34 @@
-import type { ObjectDirective } from 'vue'
+import type { DirectiveBinding, ObjectDirective } from "vue"
 
 interface CopyElementMap {
-  sync: boolean | undefined
   value: string
-  type: 'text' | 'image'
 }
 
 const copyElementMap: Map<HTMLElement, CopyElementMap> = new Map()
-const clipBoardObj = navigator.clipboard
 
-function onCopy() {
+function onCopy(this: HTMLElement) {
   const copyElement = copyElementMap.get(this)!
-  if (!copyElement.sync) {
-    clipBoardObj.writeText(copyElement.value).then(() => {
-
-    })
-  }
+  navigator.clipboard.writeText(copyElement.value).then().catch()
 }
 
-const clipBoard: ObjectDirective = {
-  mounted(el: HTMLElement, binding) {
-    if (typeof binding.value !== 'string' || binding.value.length < 1)
-      throw new Error('The binding value must be a non-empty string.')
-    copyElementMap.set(el, {
-      sync: binding.modifiers.sync,
-      value: binding.value,
-      type: 'text',
-    })
-    el.addEventListener('click', onCopy)
+function initElement(el: HTMLElement, binding: DirectiveBinding<string>) {
+  copyElementMap.set(el, {
+    value: binding.value,
+  })
+  el.addEventListener("click", onCopy)
+}
+
+const clipBoard: ObjectDirective<HTMLElement, string> = {
+  mounted(el, binding) {
+    if (typeof binding.value !== "string" || binding.value.length < 1)
+      throw new Error("The binding value must be a non-empty string.")
+    initElement(el, binding)
   },
-  updated() {
+  updated(el, binding) {
+    copyElementMap.set(el, { value: binding.value })
+  },
+  unmounted(el) {
+    el.removeEventListener("click", onCopy)
   },
 }
 

@@ -22,7 +22,7 @@ interface DocumentMouseEvents {
 
 type DocumentMouseEventsKeys = keyof DocumentMouseEvents
 
-const CUSTOM_ATTR_NAME = 'data-event-outside-type'
+const CUSTOM_ATTR_NAME = '_event-outside-type'
 
 const documentMouseEvents: DocumentMouseEvents = {
   auxclick: new Map(),

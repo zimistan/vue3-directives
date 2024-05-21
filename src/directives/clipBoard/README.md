@@ -9,10 +9,11 @@
 ## 示例
 
 ```vue
-
 <template>
   <div>
-    <button v-clip-board="'https://github.com/zimistan/vue3-directives'">点击复制</button>
+    <button v-clip-board="'https://github.com/zimistan/vue3-directives'">
+      点击复制
+    </button>
   </div>
 </template>
 ```

@@ -1,4 +1,4 @@
-import type { DirectiveBinding, ObjectDirective } from "vue"
+import type { DirectiveBinding, ObjectDirective } from 'vue'
 
 interface CopyElementMap {
   value: string
@@ -15,20 +15,20 @@ function initElement(el: HTMLElement, binding: DirectiveBinding<string>) {
   copyElementMap.set(el, {
     value: binding.value,
   })
-  el.addEventListener("click", onCopy)
+  el.addEventListener('click', onCopy)
 }
 
 const clipBoard: ObjectDirective<HTMLElement, string> = {
   mounted(el, binding) {
-    if (typeof binding.value !== "string" || binding.value.length < 1)
-      throw new Error("The binding value must be a non-empty string.")
+    if (typeof binding.value !== 'string' || binding.value.length < 1)
+      throw new Error('The binding value must be a non-empty string.')
     initElement(el, binding)
   },
   updated(el, binding) {
     copyElementMap.set(el, { value: binding.value })
   },
   unmounted(el) {
-    el.removeEventListener("click", onCopy)
+    el.removeEventListener('click', onCopy)
   },
 }
 

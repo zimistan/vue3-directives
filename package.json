@@ -9,7 +9,10 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "docs:dev": "vitepress dev docs --port 8888",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
     "@ileostar/v3-directives": "^1.0.5",
@@ -27,6 +30,7 @@
     "typescript": "^5.2.2",
     "unocss": "^0.59.0-beta.1",
     "vite": "^5.2.0",
+    "vitepress": "^1.2.2",
     "vue-tsc": "^2.0.6"
   },
   "lint-staged": {

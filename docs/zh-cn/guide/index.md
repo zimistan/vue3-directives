@@ -6,7 +6,7 @@
 
 ## TODO
 
-1. [x] [autoScroll](docs/zh-cn/directives/autoScroll) `自动滚动`
+1. [x] [autoScroll](docs/zh-cn/directives/auto-scroll.md) `自动滚动`
 2. [x] [eventOutside](./src/directives/event-outside/README.md) `元素外事件`
 3. [x] [focus](./src/directives/focus/README.md) `获得焦点`
 4. [ ] hotkey `键盘事件监听`

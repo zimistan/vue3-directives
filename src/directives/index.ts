@@ -4,12 +4,14 @@ import autoScroll from './auto-scroll/index.ts'
 import eventOutside from './event-outside'
 import focus from './focus'
 import clipBoard from './clipBoard'
+import clamp from './clamp'
 
 const directives: DirectiveType = {
   autoScroll,
   eventOutside,
   focus,
   clipBoard,
+  clamp,
 }
 
 export default {

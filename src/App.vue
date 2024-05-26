@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import ClipBoard from './test/clipBoard.vue'
+import Clamp from './test/clamp.vue'
 </script>
 
 <template>
   <div>
-    <!--    <Focus /> -->
-    <ClipBoard />
+    <Clamp />
   </div>
 </template>
 
